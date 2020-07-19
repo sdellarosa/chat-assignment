@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'username',
     ];
 
     /**
@@ -36,4 +36,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get all of the messages sent by the user.
+     */
+    public function messages_sent()
+    {
+        return $this->hasMany(Message::class, 'author_id');
+    }
+
+    /**
+     * Get all of the messages received by the user.
+     */
+    public function messages_received()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
 }
