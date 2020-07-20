@@ -112,7 +112,7 @@ class MessageRepository
                             );
 
         return $latest_sent->union($latest_received)
-                        ->orderBy('created_at', 'desc')
+                        ->orderBy('created_at', 'asc')
                         ->get()
                         ->keyBy('connected_user_id');
     }

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="messages.length != 0" class="card card-body" id="message-box">
+    <div v-if="messages.length != 0" class="card card-body overflow-auto" id="message-box">
         <p class="mb-0" v-for="message in messages">{{ message.username }}: {{ message.content }}</p>
     </div>
 </template>
@@ -11,7 +11,7 @@
             name: "Messages",
             created() {
                 this.fetchMessages();
-                this.timer = setInterval(this.fetchMessages, 500)
+                this.timer = setInterval(this.fetchMessages, 5000)
             },
             methods: {
                 fetchMessages() {

@@ -25,6 +25,7 @@ Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribut
 Vue.component('messages', require('./components/Messages.vue').default);
 Vue.component('latestMessages', require('./components/LatestMessages.vue').default);
 Vue.component('createMessage', require('./components/CreateMessage.vue').default);
+Vue.component('newMessage', require('./components/NewMessage.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

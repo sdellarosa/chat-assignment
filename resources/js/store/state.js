@@ -3,7 +3,9 @@ let state = {
     selectedUser: 0,
     messages: [],
     latestMessages: [],
-    showForm: false
+    contacts: [],
+    showForm: false,
+    newMessageMode: false
 }
 
 export default state

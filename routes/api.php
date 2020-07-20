@@ -19,6 +19,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 /**
+ * User API
+ */
+
+Route::get(
+    'users/{user}/contacts/', 
+    [
+        'uses' => 'API\UserController@contacts',
+        'as' => 'user.contacts',
+    ]
+);
+
+/**
  * Messages API
  */
 

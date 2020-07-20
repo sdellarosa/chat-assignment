@@ -24,7 +24,10 @@
             },
             methods: {
                 createMessage(message) {
-                    this.$store.dispatch('createMessage', message)
+                    this.$store.dispatch('createMessage', message).then( () => (
+                        this.$store.dispatch('fetchLatestMessages'),
+                        message.content = ''
+                    ))
                 }
             },
             computed: {

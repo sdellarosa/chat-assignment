@@ -11,8 +11,14 @@ let getters = {
     latestMessages: state => {
         return state.latestMessages
     },
+    contacts: state => {
+        return state.contacts
+    },
     showForm: state => {
         return state.showForm
+    },
+    newMessageMode: state => {
+        return state.newMessageMode
     }
 }
 

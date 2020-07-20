@@ -1,6 +1,6 @@
 <template>
     <div class="list-group">
-        <a v-for="latestMessage in latestMessages" @click="setSelectedUser(latestMessage.connected_user_id)" href="#" class="list-group-item list-group-item-action flex-column align-items-start" data-toggle="list">
+        <a v-for="latestMessage in latestMessages" @click="onClick(latestMessage.connected_user_id)" href="#" class="list-group-item list-group-item-action flex-column align-items-start connected-users" data-toggle="list">
             <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ latestMessage.connected_user }}</h5>
             <small>{{ latestMessage.created_at }}</small>
@@ -19,11 +19,22 @@
                 this.$store.dispatch('setUser', this.$user)
             },
             mounted() {
-                this.$store.dispatch('fetchLatestMessages', this.$user)
+                this.fetchLatestMessages();
+                this.timer = setInterval(this.fetchLatestMessages, 5000)
             },
             methods: {
-                setSelectedUser(selectedUser) {
+                fetchLatestMessages() {
+                    this.$store.dispatch('fetchLatestMessages')
+                },
+                onClick(selectedUser) {
                     this.$store.dispatch('setSelectedUser', selectedUser)
+                    this.$store.dispatch('setNewMessageMode', false)
+                },
+                disableListItems() {
+                    let children = this.$el.querySelectorAll('.connected-users')
+                    children.forEach(child => {
+                        child.classList.remove('active')
+                    })
                 }
             },
             computed: {
@@ -31,7 +42,11 @@
                     'user',
                     'selectedUser',
                     'latestMessages',
+                    'newMessageMode'
                 ])
+            },
+            watch: {
+                'newMessageMode': 'disableListItems'
             }
         }
 </script>

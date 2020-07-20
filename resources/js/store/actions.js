@@ -8,7 +8,11 @@ let actions = {
     setSelectedUser({commit}, selectedUser) {
         commit('SET_SELECTED_USER', selectedUser)
     },
-    fetchLatestMessages({commit}, user) {
+    setNewMessageMode({commit}, newMessageMode) {
+        commit('SET_NEW_MESSAGE_MODE', newMessageMode)
+    },
+    fetchLatestMessages({commit}) {
+        const user = this.state.user
         axios.get(`/api/messages/${user}`)
             .then(res => {
                 commit('FETCH_LATEST_MESSAGES', res.data)
@@ -20,7 +24,7 @@ let actions = {
     createMessage({commit}, message) {
         message.author = this.state.user
         message.recipient = this.state.selectedUser
-        axios.post('/api/messages', message)
+        return axios.post('/api/messages', message)
             .then(res => {
                 commit('CREATE_MESSAGE', res.data)
             }).catch(err => {
@@ -41,16 +45,19 @@ let actions = {
                 })
         }
     },
-    deleteMessage({commit}, message) {
-        axios.delete(`/api/messages/${message.id}`)
+    flushMessages({commit}) {
+        commit('FLUSH_MESSAGES')
+    },
+    fetchContacts({commit}) {
+        const user = this.state.user
+        axios.get(`/api/users/${user}/contacts/`)
             .then(res => {
-                if (res.data === 'ok')
-                    commit('DELETE_MESSAGE', message)
+                commit('FETCH_CONTACTS', res.data)
             })
             .catch(err => {
                 console.log(err)
             })
-    }
+    },
 }
 
 export default actions

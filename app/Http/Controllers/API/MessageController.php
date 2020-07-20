@@ -18,7 +18,7 @@ class MessageController extends Controller
     /**
      * The user repository instance.
      *
-     * @var MessageRepository
+     * @var UserRepository
      */
     protected $users;
 

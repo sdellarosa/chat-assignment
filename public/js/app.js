@@ -1939,7 +1939,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     createMessage: function createMessage(message) {
-      this.$store.dispatch('createMessage', message);
+      var _this = this;
+
+      this.$store.dispatch('createMessage', message).then(function () {
+        return _this.$store.dispatch('fetchLatestMessages'), message.content = '';
+      });
     }
   },
   computed: _objectSpread({
@@ -1986,14 +1990,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch('setUser', this.$user);
   },
   mounted: function mounted() {
-    this.$store.dispatch('fetchLatestMessages', this.$user);
+    this.fetchLatestMessages();
+    this.timer = setInterval(this.fetchLatestMessages, 5000);
   },
   methods: {
-    setSelectedUser: function setSelectedUser(selectedUser) {
+    fetchLatestMessages: function fetchLatestMessages() {
+      this.$store.dispatch('fetchLatestMessages');
+    },
+    onClick: function onClick(selectedUser) {
       this.$store.dispatch('setSelectedUser', selectedUser);
+      this.$store.dispatch('setNewMessageMode', false);
+    },
+    disableListItems: function disableListItems() {
+      var children = this.$el.querySelectorAll('.connected-users');
+      children.forEach(function (child) {
+        child.classList.remove('active');
+      });
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['user', 'selectedUser', 'latestMessages']))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['user', 'selectedUser', 'latestMessages', 'newMessageMode'])),
+  watch: {
+    'newMessageMode': 'disableListItems'
+  }
 });
 
 /***/ }),
@@ -2025,7 +2043,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   name: "Messages",
   created: function created() {
     this.fetchMessages();
-    this.timer = setInterval(this.fetchMessages, 500);
+    this.timer = setInterval(this.fetchMessages, 5000);
   },
   methods: {
     fetchMessages: function fetchMessages() {
@@ -2035,6 +2053,69 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['messages', 'selectedUser'])),
   watch: {
     'selectedUser': 'fetchMessages'
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewMessage.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NewMessage.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "NewMessage",
+  mounted: function mounted() {
+    this.$store.dispatch('fetchContacts');
+  },
+  methods: {
+    onClick: function onClick(event) {
+      this.$store.dispatch('setNewMessageMode', true);
+      this.$store.dispatch('flushMessages');
+      this.$store.dispatch('setSelectedUser', 0);
+    },
+    onChange: function onChange(event) {
+      this.$store.dispatch('setSelectedUser', event.target.value);
+    },
+    toggleCollapsible: function toggleCollapsible(val, oldVal) {
+      if (val != oldVal && val == false) {//
+      }
+    }
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['contacts', 'newMessageMode'])),
+  watch: {
+    'newMessageMode': 'toggleCollapsible'
   }
 });
 
@@ -37735,11 +37816,11 @@ var render = function() {
         "a",
         {
           staticClass:
-            "list-group-item list-group-item-action flex-column align-items-start",
+            "list-group-item list-group-item-action flex-column align-items-start connected-users",
           attrs: { href: "#", "data-toggle": "list" },
           on: {
             click: function($event) {
-              return _vm.setSelectedUser(latestMessage.connected_user_id)
+              return _vm.onClick(latestMessage.connected_user_id)
             }
           }
         },
@@ -37786,7 +37867,10 @@ var render = function() {
   return _vm.messages.length != 0
     ? _c(
         "div",
-        { staticClass: "card card-body", attrs: { id: "message-box" } },
+        {
+          staticClass: "card card-body overflow-auto",
+          attrs: { id: "message-box" }
+        },
         _vm._l(_vm.messages, function(message) {
           return _c("p", { staticClass: "mb-0" }, [
             _vm._v(_vm._s(message.username) + ": " + _vm._s(message.content))
@@ -37795,6 +37879,96 @@ var render = function() {
         0
       )
     : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "my-2" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-block",
+          attrs: {
+            "data-toggle": "collapse",
+            href: "#contactListCollapse",
+            role: "button",
+            "aria-expanded": "false",
+            "aria-controls": "contactListCollapse",
+            id: "newMessageButton"
+          },
+          on: {
+            click: function($event) {
+              return _vm.onClick($event)
+            }
+          }
+        },
+        [_vm._v("New Message")]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "collapse my-2", attrs: { id: "contactListCollapse" } },
+      [
+        _c("div", { staticClass: "card card-body" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "contactList" } }, [
+              _vm._v("Contacts")
+            ]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                staticClass: "form-control",
+                attrs: { id: "contactList", name: "selectedUser" },
+                on: {
+                  change: function($event) {
+                    return _vm.onChange($event)
+                  }
+                }
+              },
+              [
+                _c(
+                  "option",
+                  {
+                    attrs: { hidden: "", disabled: "", selected: "", value: "" }
+                  },
+                  [_vm._v(" -- select an option -- ")]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.contacts, function(user) {
+                  return _c("option", { domProps: { value: user.id } }, [
+                    _vm._v(_vm._s(user.username))
+                  ])
+                })
+              ],
+              2
+            )
+          ])
+        ])
+      ]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -51259,6 +51433,7 @@ Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribut
 Vue.component('messages', __webpack_require__(/*! ./components/Messages.vue */ "./resources/js/components/Messages.vue")["default"]);
 Vue.component('latestMessages', __webpack_require__(/*! ./components/LatestMessages.vue */ "./resources/js/components/LatestMessages.vue")["default"]);
 Vue.component('createMessage', __webpack_require__(/*! ./components/CreateMessage.vue */ "./resources/js/components/CreateMessage.vue")["default"]);
+Vue.component('newMessage', __webpack_require__(/*! ./components/NewMessage.vue */ "./resources/js/components/NewMessage.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -51524,6 +51699,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/NewMessage.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/NewMessage.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewMessage.vue?vue&type=template&id=75930b72& */ "./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72&");
+/* harmony import */ var _NewMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewMessage.vue?vue&type=script&lang=js& */ "./resources/js/components/NewMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NewMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/NewMessage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/NewMessage.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/NewMessage.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./NewMessage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./NewMessage.vue?vue&type=template&id=75930b72& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewMessage.vue?vue&type=template&id=75930b72&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewMessage_vue_vue_type_template_id_75930b72___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/store/actions.js":
 /*!***************************************!*\
   !*** ./resources/js/store/actions.js ***!
@@ -51546,26 +51790,31 @@ var actions = {
     var commit = _ref3.commit;
     commit('SET_SELECTED_USER', selectedUser);
   },
-  fetchLatestMessages: function fetchLatestMessages(_ref4, user) {
+  setNewMessageMode: function setNewMessageMode(_ref4, newMessageMode) {
     var commit = _ref4.commit;
+    commit('SET_NEW_MESSAGE_MODE', newMessageMode);
+  },
+  fetchLatestMessages: function fetchLatestMessages(_ref5) {
+    var commit = _ref5.commit;
+    var user = this.state.user;
     axios.get("/api/messages/".concat(user)).then(function (res) {
       commit('FETCH_LATEST_MESSAGES', res.data);
     })["catch"](function (err) {
       console.log(err);
     });
   },
-  createMessage: function createMessage(_ref5, message) {
-    var commit = _ref5.commit;
+  createMessage: function createMessage(_ref6, message) {
+    var commit = _ref6.commit;
     message.author = this.state.user;
     message.recipient = this.state.selectedUser;
-    axios.post('/api/messages', message).then(function (res) {
+    return axios.post('/api/messages', message).then(function (res) {
       commit('CREATE_MESSAGE', res.data);
     })["catch"](function (err) {
       console.log(err);
     });
   },
-  fetchMessages: function fetchMessages(_ref6) {
-    var commit = _ref6.commit;
+  fetchMessages: function fetchMessages(_ref7) {
+    var commit = _ref7.commit;
     var user = this.state.user;
     var selectedUser = this.state.selectedUser;
 
@@ -51578,10 +51827,15 @@ var actions = {
       });
     }
   },
-  deleteMessage: function deleteMessage(_ref7, message) {
-    var commit = _ref7.commit;
-    axios["delete"]("/api/messages/".concat(message.id)).then(function (res) {
-      if (res.data === 'ok') commit('DELETE_MESSAGE', message);
+  flushMessages: function flushMessages(_ref8) {
+    var commit = _ref8.commit;
+    commit('FLUSH_MESSAGES');
+  },
+  fetchContacts: function fetchContacts(_ref9) {
+    var commit = _ref9.commit;
+    var user = this.state.user;
+    axios.get("/api/users/".concat(user, "/contacts/")).then(function (res) {
+      commit('FETCH_CONTACTS', res.data);
     })["catch"](function (err) {
       console.log(err);
     });
@@ -51613,8 +51867,14 @@ var getters = {
   latestMessages: function latestMessages(state) {
     return state.latestMessages;
   },
+  contacts: function contacts(state) {
+    return state.contacts;
+  },
   showForm: function showForm(state) {
     return state.showForm;
+  },
+  newMessageMode: function newMessageMode(state) {
+    return state.newMessageMode;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (getters);
@@ -51672,14 +51932,23 @@ var mutations = {
   SET_SHOW_FORM: function SET_SHOW_FORM(state, showForm) {
     state.showForm = showForm;
   },
+  SET_NEW_MESSAGE_MODE: function SET_NEW_MESSAGE_MODE(state, newMessageMode) {
+    state.newMessageMode = newMessageMode;
+  },
   FETCH_LATEST_MESSAGES: function FETCH_LATEST_MESSAGES(state, latestMessages) {
     return state.latestMessages = latestMessages;
   },
   FETCH_MESSAGES: function FETCH_MESSAGES(state, messages) {
     return state.messages = messages;
   },
+  FLUSH_MESSAGES: function FLUSH_MESSAGES(state) {
+    return state.messages = [];
+  },
   CREATE_MESSAGE: function CREATE_MESSAGE(state, message) {
     state.messages.push(message);
+  },
+  FETCH_CONTACTS: function FETCH_CONTACTS(state, contacts) {
+    return state.contacts = contacts;
   },
   DELETE_MESSAGE: function DELETE_MESSAGE(state, message) {
     var index = state.messages.findIndex(function (item) {
@@ -51706,7 +51975,9 @@ var state = {
   selectedUser: 0,
   messages: [],
   latestMessages: [],
-  showForm: false
+  contacts: [],
+  showForm: false,
+  newMessageMode: false
 };
 /* harmony default export */ __webpack_exports__["default"] = (state);
 

@@ -31,11 +31,20 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-sm">
-                                <latest-messages />
+                                <div>
+                                    <new-message />
+                                </div>
+                                <div class="my-2">
+                                    <latest-messages />
+                                </div>
                             </div>
                             <div class="col-sm-8">
-                                <div class="mb-3"><messages /></div>
-                                <div><create-message /></div>
+                                <div class="my-2">
+                                    <messages />
+                                </div>
+                                <div class="my-2">
+                                    <create-message />
+                                </div>
                             </div>    
                         </div>
                     </div>
