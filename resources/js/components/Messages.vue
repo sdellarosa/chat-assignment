@@ -1,6 +1,6 @@
 <template>
     <div v-if="messages.length != 0" class="card card-body overflow-auto" id="message-box">
-        <p class="mb-0" v-for="message in messages">{{ message.username }}: {{ message.content }}</p>
+        <p class="mb-0" v-for="message in messages"><b>{{ message.username }}</b>: {{ message.content }}</p>
     </div>
 </template>
 

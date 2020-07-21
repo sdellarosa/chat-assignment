@@ -2109,7 +2109,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$store.dispatch('setSelectedUser', event.target.value);
     },
     toggleCollapsible: function toggleCollapsible(val, oldVal) {
-      if (val != oldVal && val == false) {//
+      if (val == false) {//
       }
     }
   },
@@ -37873,7 +37873,8 @@ var render = function() {
         },
         _vm._l(_vm.messages, function(message) {
           return _c("p", { staticClass: "mb-0" }, [
-            _vm._v(_vm._s(message.username) + ": " + _vm._s(message.content))
+            _c("b", [_vm._v(_vm._s(message.username))]),
+            _vm._v(": " + _vm._s(message.content))
           ])
         }),
         0
