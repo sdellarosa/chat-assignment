@@ -51430,7 +51430,12 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribute('content');
+try {
+  Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribute('content');
+} catch (err) {
+  Vue.prototype.$user = 0;
+}
+
 Vue.component('messages', __webpack_require__(/*! ./components/Messages.vue */ "./resources/js/components/Messages.vue")["default"]);
 Vue.component('latestMessages', __webpack_require__(/*! ./components/LatestMessages.vue */ "./resources/js/components/LatestMessages.vue")["default"]);
 Vue.component('createMessage', __webpack_require__(/*! ./components/CreateMessage.vue */ "./resources/js/components/CreateMessage.vue")["default"]);

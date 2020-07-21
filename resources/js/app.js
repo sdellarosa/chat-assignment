@@ -21,7 +21,11 @@ import store from './store/index'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribute('content');
+try {
+    Vue.prototype.$user = document.querySelector("meta[name='user-id']").getAttribute('content');
+} catch(err) {
+    Vue.prototype.$user = 0;
+}
 Vue.component('messages', require('./components/Messages.vue').default);
 Vue.component('latestMessages', require('./components/LatestMessages.vue').default);
 Vue.component('createMessage', require('./components/CreateMessage.vue').default);
