@@ -53,49 +53,7 @@ Route::get(
 Route::get(
     'messages/{user1}/{user2}', 
     [
-        'uses' => 'API\MessageController@retrieve',
-        'as' => 'messages.retrieve',
-    ]
-);
-
-/* for JSON-API compliance
-Route::get(
-    'messages/{message}', 
-    [
         'uses' => 'API\MessageController@show',
         'as' => 'messages.show',
     ]
 );
-
-Route::get(
-    'messages/{message}/relationships/author',
-    [
-        'uses' => 'API\MessageRelationshipController@author',
-        'as' => 'messages.relationships.author',
-    ]
-);
-
-Route::get(
-    'messages/{message}/author',
-    [
-        'uses' => 'API\MessageRelationshipController@author',
-        'as' => 'messages.author',
-    ]
-);
-
-Route::get(
-    'messages/{message}/relationships/recipient',
-    [
-        'uses' =>  'API\MessageRelationshipController@recipient',
-        'as' => 'messages.relationships.recipient',
-    ]
-);
-
-Route::get(
-    'messages/{message}/recipient',
-    [
-        'uses' =>  'API\MessageRelationshipController@recipient',
-        'as' => 'messages.recipient',
-    ]
-);
-*/

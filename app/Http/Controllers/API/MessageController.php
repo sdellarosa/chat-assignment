@@ -8,8 +8,7 @@ use App\User;
 use App\Message;
 use App\Repositories\UserRepository;
 use App\Repositories\MessageRepository;
-// use App\Http\Resources\MessageResource;
-// use App\Http\Resources\MessagesResource;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -53,11 +52,6 @@ class MessageController extends Controller
     public function index(User $user)
     {
         return response()->json($this->messages->latestForUser($user));
-
-        // For JSON-API compliance, use:
-        // return new MessagesResource(
-        //     $this->messages->latestForUser($user)
-        // );
     }
 
     /**
@@ -65,7 +59,7 @@ class MessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function retrieve(User $user1, User $user2)
+    public function show(User $user1, User $user2)
     {
         return response()->json($this->messages->betweenUsers($user1, $user2));
     }
