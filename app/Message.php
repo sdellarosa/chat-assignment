@@ -14,11 +14,20 @@ class Message extends Model
     protected $fillable = ['content'];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+    ];
+
+    /**
      * Get the user that created the message.
      */
     public function author()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     /**
@@ -26,6 +35,6 @@ class Message extends Model
      */
     public function recipient()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'recipient_id');
     }
 }
