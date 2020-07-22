@@ -44,7 +44,6 @@ Run the following commands.
 ```
 ./setup.sh
 php artisan serve
-
 ```
 
 The setup file includes commands to install the required packages, set the environment variables, create the database tables and seed them with a sample data. Note: since this repository contains precompiled components, it's not necessary recompile everything using `npm` unless changes are made.
