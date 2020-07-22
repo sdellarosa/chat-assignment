@@ -31,13 +31,13 @@ There are four defined routes for storing and viewing of the data. These four ar
 Although it wasn't a requirement, the project is a full stack application that includes a front-end development. It utilizes the Vue.js framework. A request is made by a Vue component to retrieve the messages every 5000 ms.
 
 
-## Setup
+## Running the project locally
 ### Prerequisites
 * Composer
 * PHP 7.4
 * SQLite
 
-### Running the project locally
+### Setup
 
 Run the following commands.
 
