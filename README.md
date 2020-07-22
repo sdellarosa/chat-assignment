@@ -34,7 +34,7 @@ Although it wasn't a requirement, the project is a full stack application that i
 ## Setup
 ### Prerequisites
 * Composer
-* PHP 7
+* PHP 7.4
 * SQLite
 
 ### Running the project locally
