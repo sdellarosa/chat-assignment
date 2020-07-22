@@ -23,7 +23,7 @@ There are four defined routes for storing and viewing of the data. These four ar
     - `recipient` that contains the ID of the user receiving the message
     - `content` that contains the content of the message.
 * `api/messages/{user1}/{user2}`: `GET` route to retrieve all messages exchanged between two users. The route takes two parameters, the ID of the two users.
-* `api/messages/{user}`: `GET` route to fetch the last message exchanged by a given user and any other user. The purpose of this route is to display an inbox view, typical in a messaging app. The route takes one parameter, the ID of the user.
+* `api/messages/{user}`: `GET` route to fetch the last messages exchanged by a given user and any other user in the database. The purpose of this route is to display an inbox view, typical in a messaging app. The route takes one parameter, the ID of the user.
 * `api/users/{user}/contact`: `GET` route to fetch all users in the system excluding the given user. The route takes one parameter, the ID of the user.
 
 
