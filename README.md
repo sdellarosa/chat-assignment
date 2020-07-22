@@ -1,6 +1,6 @@
 # Chat App Assignment
 
-This project was developed as part of an assignment of my application as a backend engineer at Bunq. The assignment is to build the a simple chat application backed in PHP.
+This project was developed as part of an assignment of my application as a backend engineer at Bunq. The assignment is to build  a simple chat application backend in PHP.
 
 ## Demo
 The project has been deployed on Heroku and is live [here](https://chat-app-assignment.herokuapp.com/). To look at an existing user that has sent and received messages, use: `john.doe` as the username with the password `secret123`.
